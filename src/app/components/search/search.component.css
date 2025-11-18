@@ -1,0 +1,668 @@
+.search-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Barra de búsqueda fija */
+.search-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--pink-pastel-80);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-bottom: 1px solid rgba(255,209,232,0.12);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255,209,232,0.05) inset;
+  z-index: 1000;
+  padding: 1.5rem 2rem;
+}
+
+/* api-status removed (kept styles removed) */
+
+.error-message {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  border-radius: 12px;
+  color: #7f1f1f;
+  font-size: 0.9rem;
+  font-weight: 600;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-bar {
+  display: flex;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  padding: 1.1rem 1.8rem;
+  border: 2px solid rgba(255,209,232,0.28);
+  border-radius: 50px;
+  background: rgba(255,209,232,0.32);
+  backdrop-filter: blur(10px);
+  color: var(--text-dark);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.search-input::placeholder {
+  color: rgba(139, 90, 100, 0.55);
+  font-weight: 500;
+}
+
+.search-input:focus {
+  border-color: var(--pink-accent);
+  background: rgba(255,209,232,0.45);
+  box-shadow:
+    0 0 0 4px rgba(255,209,232,0.08),
+    0 8px 24px rgba(255,140,180,0.08);
+  transform: translateY(-2px);
+}
+
+.search-button {
+  padding: 1.1rem 2.5rem;
+  background: linear-gradient(135deg, var(--pink-accent) 0%, var(--pink-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  box-shadow:
+    0 4px 16px rgba(255,140,180,0.14),
+    0 0 0 1px rgba(255,255,255,0.06) inset;
+  letter-spacing: 0.5px;
+}
+
+.search-button:hover {
+  background: linear-gradient(135deg, var(--pink-dark) 0%, var(--pink-accent) 100%);
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 24px rgba(255,140,180,0.18),
+    0 0 0 1px rgba(255,255,255,0.1) inset;
+}
+
+.back-button {
+  padding: 1.1rem 2rem;
+  background: rgba(255,200,220,0.2);
+  backdrop-filter: blur(10px);
+  color: var(--text-dark);
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  border: 1px solid rgba(255,209,232,0.18);
+  letter-spacing: 0.3px;
+}
+
+.back-button:hover {
+  background: rgba(255,200,220,0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255,140,180,0.12);
+  border-color: rgba(255,209,232,0.28);
+}
+
+/* Resultados */
+.search-results {
+  flex: 1;
+  padding: 7rem 2rem 6rem 2rem;
+  overflow-y: auto;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: #8a6f79;
+}
+
+.spinner {
+  width: 64px;
+  height: 64px;
+  border: 5px solid rgba(255,209,232,0.15);
+  border-top-color: var(--pink-accent);
+  border-radius: 50%;
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading p {
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 4rem;
+  color: #8a6f79;
+}
+
+.no-results-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.no-results p {
+  font-size: 1.2rem;
+}
+
+.search-prompt {
+  text-align: center;
+  padding: 4rem;
+  color: #8a6f79;
+}
+
+.search-prompt-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-prompt h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--pink-accent) 0%, var(--pink-pastel) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+
+.search-prompt p {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: rgba(59,31,36,0.7);
+  letter-spacing: 0.3px;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  color: var(--text-dark);
+}
+
+.album-card .track-image {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.album-card .track-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artist-card .track-image {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.artist-card .track-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.track-card {
+  background: rgba(255,209,232,0.32);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border-radius: 24px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255,209,232,0.06) inset;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,209,232,0.04);
+}
+
+.track-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,209,232,0.1) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.track-card:hover::before {
+  opacity: 1;
+}
+
+.track-card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow:
+    0 16px 40px rgba(255,140,180,0.12),
+    0 0 0 1px rgba(255,209,232,0.08) inset;
+  border-color: rgba(255,209,232,0.08);
+}
+
+.track-image {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.track-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.track-card:hover .track-image img {
+  transform: scale(1.15);
+}
+
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,140,180,0.9), rgba(255,209,232,0.8));
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.track-card:hover .play-overlay {
+  opacity: 1;
+}
+
+.play-icon {
+  font-size: 3.5rem;
+  transform: scale(0.8);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12));
+}
+
+.track-card:hover .play-icon {
+  transform: scale(1);
+}
+
+/* ===== Estilos específicos para resultados de canciones en la búsqueda ===== */
+/* Selecciona solo las tarjetas que NO sean album-card ni artist-card (es decir: tracks) */
+.results-grid > .track-card:not(.album-card):not(.artist-card) {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem;
+  background: linear-gradient(180deg, rgba(255,209,232,0.18), rgba(255,200,220,0.08));
+  border-radius: 12px;
+  border: 1px solid rgba(255,209,232,0.06);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.04);
+  transition: transform 0.26s ease, box-shadow 0.26s ease, background 0.26s ease;
+}
+
+.results-grid > .track-card:not(.album-card):not(.artist-card) .track-image {
+  width: 86px;
+  height: 86px;
+  flex: 0 0 86px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+
+.results-grid > .track-card:not(.album-card):not(.artist-card) .track-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.results-grid > .track-card:not(.album-card):not(.artist-card) .track-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.results-grid > .track-card:not(.album-card):not(.artist-card) .track-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.results-grid > .track-card:not(.album-card):not(.artist-card) .track-artist {
+  font-size: 0.87rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.results-grid > .track-card:not(.album-card):not(.artist-card):hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 42px rgba(255,140,180,0.12);
+  background: linear-gradient(180deg, rgba(255,220,236,0.25), rgba(255,200,220,0.12));
+}
+
+.results-grid > .track-card:not(.album-card):not(.artist-card) .play-overlay {
+  background: linear-gradient(135deg, rgba(255,140,180,0.95), rgba(255,209,232,0.9));
+}
+
+.results-grid > .track-card:not(.album-card):not(.artist-card) .play-icon {
+  font-size: 2.2rem;
+}
+
+/* ===== Estilos para álbumes ===== */
+.results-grid > .track-card.album-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  background: linear-gradient(180deg, rgba(255,220,236,0.14), rgba(255,200,220,0.06));
+  border-radius: 12px;
+  border: 1px solid rgba(255,209,232,0.06);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.04);
+  transition: transform 0.26s ease, box-shadow 0.26s ease, background 0.26s ease;
+}
+
+.results-grid > .track-card.album-card .track-image {
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+}
+
+.results-grid > .track-card.album-card .track-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.results-grid > .track-card.album-card .track-info {
+  text-align: center;
+}
+
+.results-grid > .track-card.album-card .track-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.results-grid > .track-card.album-card .track-artist {
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.results-grid > .track-card.album-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 20px 48px rgba(255,140,180,0.12);
+  background: linear-gradient(180deg, rgba(255,230,242,0.28), rgba(255,210,230,0.12));
+}
+
+/* ===== Estilos para artistas ===== */
+.results-grid > .track-card.artist-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem;
+  background: linear-gradient(180deg, rgba(255,209,232,0.12), rgba(255,200,220,0.04));
+  border-radius: 12px;
+  border: 1px solid rgba(255,209,232,0.05);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.04);
+  transition: transform 0.24s ease, box-shadow 0.24s ease;
+}
+
+.results-grid > .track-card.artist-card .track-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+}
+
+.results-grid > .track-card.artist-card .track-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.results-grid > .track-card.artist-card .track-info {
+  text-align: center;
+}
+
+.results-grid > .track-card.artist-card .track-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.results-grid > .track-card.artist-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 40px rgba(255,140,180,0.10);
+}
+
+
+
+.track-info {
+  color: var(--text-dark);
+}
+
+.track-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-dark);
+  letter-spacing: 0.2px;
+}
+
+.track-artist {
+  font-size: 0.95rem;
+  color: rgba(59,31,36,0.7);
+  margin-bottom: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.track-album {
+  font-size: 0.85rem;
+  color: rgba(59,31,36,0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+/* Controles de reproducción */
+.player-controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--pink-pastel-85);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  border-top: 1px solid rgba(255,209,232,0.08);
+  box-shadow:
+    0 -8px 32px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255,209,232,0.04) inset;
+  z-index: 1000;
+  padding: 1.2rem 2rem;
+}
+
+.controls-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.control-btn {
+  background: rgba(255,180,210,0.14);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,209,232,0.22);
+  color: var(--text-dark);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.control-btn:hover {
+  background: rgba(255,180,210,0.22);
+  transform: scale(1.15);
+  box-shadow: 0 8px 20px rgba(255,140,180,0.12);
+  border-color: rgba(255,209,232,0.28);
+}
+
+.play-btn {
+  width: 68px;
+  height: 68px;
+  background: linear-gradient(135deg, var(--pink-accent) 0%, var(--pink-dark) 100%);
+  font-size: 1.8rem;
+  box-shadow:
+    0 8px 24px rgba(255,140,180,0.18),
+    0 0 0 1px rgba(255,255,255,0.06) inset;
+  border: none;
+}
+
+.play-btn:hover {
+  background: linear-gradient(135deg, var(--pink-dark) 0%, var(--pink-accent) 100%);
+  box-shadow:
+    0 12px 32px rgba(255,140,180,0.22),
+    0 0 0 1px rgba(255,255,255,0.1) inset;
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+  }
+
+  .search-input,
+  .search-button,
+  .back-button {
+    width: 100%;
+  }
+  /* Removed duplicate/purple styles to keep search view using the pink palette */
+  .results-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+}
+
+/* Animaciones al seleccionar (click / focus) para mejorar feedback */
+.track-card:active,
+.results-grid > .track-card:not(.album-card):not(.artist-card):active {
+  transform: translateY(-6px) scale(0.995);
+  box-shadow: 0 12px 34px rgba(255,140,180,0.08);
+  animation: clickPop 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.results-grid > .track-card.album-card:active,
+.results-grid > .track-card.artist-card:active {
+  transform: translateY(-3px) scale(0.985);
+  animation: clickPop 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.search-button:active,
+.back-button:active {
+  transform: translateY(-2px) scale(0.98);
+  animation: clickPop 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.search-button:focus-visible,
+.back-button:focus-visible,
+.track-card:focus-visible,
+.results-grid > .track-card.album-card:focus-visible,
+.results-grid > .track-card.artist-card:focus-visible {
+  outline: none;
+  animation: focusPulse 700ms ease-out;
+}
+
+@keyframes clickPop {
+  0% { transform: translateY(0) scale(1); }
+  35% { transform: translateY(1px) scale(0.94); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes focusPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,180,210,0.0); }
+  50% { box-shadow: 0 0 0 8px rgba(255,180,210,0.10); }
+  100% { box-shadow: 0 0 0 0 rgba(255,180,210,0.0); }
+}
