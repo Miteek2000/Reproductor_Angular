@@ -1,0 +1,136 @@
+<div class="app-container">
+  <header class="navbar">
+    <div class="nav-content">
+      <h1 class="logo">Reproductor</h1>
+
+      <div class="header-search">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="onSearch()"
+          placeholder="Encuentra canciones, artistas o álbumes"
+          class="search-input">
+        <button (click)="onSearch()" class="search-button">Buscar</button>
+        <button *ngIf="hasSearched" (click)="hasSearched = false; searchQuery = ''; searchTracks = [];" class="clear-button">Cerrar</button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <!-- Canción actual -->
+    <section class="current-track">
+      <div class="track-card horizontal" *ngIf="currentTrack; else noTrack">
+        <div class="track-image-large">
+          <img [src]="getAlbumImage(currentTrack)" [alt]="currentTrack.name">
+        </div>
+        <div class="track-info-large">
+          <h2 class="track-title">{{ currentTrack.name }}</h2>
+          <p class="track-artist">{{ getArtistNames(currentTrack) }}</p>
+          <p class="track-album">{{ currentTrack.album.name }}</p>
+        </div>
+      </div>
+      <ng-template #noTrack>
+        <div class="no-track">
+              <div class="no-track-visual"></div>
+              <p>No hay canción seleccionada</p>
+        </div>
+      </ng-template>
+    </section>
+
+    <!-- Inline search results (muestra cuando se buscan canciones) -->
+    <section *ngIf="hasSearched" class="search-inline">
+      <div class="search-results-inline">
+        <div *ngIf="isLoading" class="loading">Cargando resultados...</div>
+
+        <div *ngIf="!isLoading && (searchTracks.length || searchAlbums.length)">
+
+          <div *ngIf="searchTracks.length">
+            <h3 class="section-title">Canciones</h3>
+            <div class="results-grid">
+              <div *ngFor="let track of searchTracks" class="result-card" (click)="selectTrackFromSearch(track)">
+                <div class="result-image">
+                  <img [src]="getAlbumImage(track)" [alt]="track.name">
+                  <button class="hover-play" (click)="selectTrackFromSearch(track); $event.stopPropagation();" title="Reproducir">▶</button>
+                </div>
+                <div class="result-info">
+                  <div class="result-title">{{ track.name }}</div>
+                  <div class="result-subtitle">{{ getArtistNames(track) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+              <div *ngIf="searchTracks.length && searchAlbums.length" class="section-divider"></div>
+              <div *ngIf="searchAlbums.length">
+            <h3 class="section-title">Álbumes</h3>
+            <div class="results-grid">
+              <div *ngFor="let album of searchAlbums" class="result-card" (click)="selectAlbum(album)">
+                <div class="result-image">
+                  <img [src]="album.images[0]?.url || 'https://via.placeholder.com/300'" [alt]="album.name">
+                </div>
+                <div class="result-info">
+                  <div class="result-title">{{ album.name }}</div>
+                  <div class="result-subtitle">{{ album.artists?.[0]?.name || '' }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!isLoading && (!searchTracks.length && !searchAlbums.length && !searchArtists.length)" class="no-results">
+          <p>No se encontraron resultados.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Playlist actual (derecha) -->
+    <aside class="playlist">
+      <h3 class="playlist-title">Playlist Actual</h3>
+      <div class="playlist-content">
+        <div *ngIf="playlist.length === 0" class="empty-playlist">
+          <p>No hay canciones en la playlist</p>
+        </div>
+        <div class="playlist-items" *ngIf="playlist.length > 0">
+          <div 
+            *ngFor="let track of playlist" 
+            class="playlist-item"
+            [class.active]="currentTrack?.id === track.id"
+            (click)="selectTrack(track)">
+            <img [src]="getAlbumImage(track)" [alt]="track.name" class="playlist-item-image">
+            <div class="playlist-item-info">
+              <p class="playlist-item-name">{{ track.name }}</p>
+              <p class="playlist-item-artist">{{ getArtistNames(track) }}</p>
+              <p class="playlist-item-album">{{ track.album.name }}</p>
+            </div>
+            <button 
+              class="remove-btn" 
+              (click)="removeFromPlaylist(track.id); $event.stopPropagation()"
+              title="Eliminar">
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Controles de reproducción fijos abajo -->
+  <footer class="player-controls">
+    <div class="controls-content">
+      <div class="control-buttons-group">
+        <button class="control-btn prev-btn" title="Anterior" (click)="prevTrack()">
+          ⏮️
+        </button>
+        <button class="control-btn play-btn" title="Reproducir/Pausar">
+          ▶️
+        </button>
+        <button class="control-btn next-btn" title="Siguiente" (click)="nextTrack()">
+          ⏭️
+        </button>
+      </div>
+
+    </div>
+  </footer>
+</div>
