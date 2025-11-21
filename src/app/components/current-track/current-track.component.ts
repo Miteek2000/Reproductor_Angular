@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Track } from '../../models/track.model';
 
 @Component({
-  selector: 'app-current-track',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './current-track.component.html',
-  styleUrls: ['./current-track.component.css']
+    selector: 'app-current-track',
+    imports: [CommonModule],
+    templateUrl: './current-track.component.html',
+    styleUrls: ['./current-track.component.css']
 })
 export class CurrentTrackComponent {
   @Input() track: Track | null = null;

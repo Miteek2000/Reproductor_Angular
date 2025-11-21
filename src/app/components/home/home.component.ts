@@ -8,11 +8,10 @@ import { SearchInlineComponent } from '../search-inline/search-inline.component'
 import { PlaylistComponent } from '../playlist/playlist.component';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [CommonModule, FormsModule, CurrentTrackComponent, SearchInlineComponent, PlaylistComponent],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+    selector: 'app-home',
+    imports: [CommonModule, FormsModule, CurrentTrackComponent, SearchInlineComponent, PlaylistComponent],
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   currentTrack: Track | null = null;

@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Track } from '../../models/track.model';
 
 @Component({
-  selector: 'app-playlist',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './playlist.component.html',
-  styleUrls: ['./playlist.component.css']
+    selector: 'app-playlist',
+    imports: [CommonModule],
+    templateUrl: './playlist.component.html',
+    styleUrls: ['./playlist.component.css']
 })
 export class PlaylistComponent {
   @Input() playlist: Track[] = [];

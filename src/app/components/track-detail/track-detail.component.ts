@@ -5,11 +5,10 @@ import { SpotifyService } from '../../services/spotify.service';
 import { Track } from '../../models/track.model';
 
 @Component({
-  selector: 'app-track-detail',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
-  templateUrl: './track-detail.component.html',
-  styleUrls: ['./track-detail.component.css']
+    selector: 'app-track-detail',
+    imports: [CommonModule, RouterLink],
+    templateUrl: './track-detail.component.html',
+    styleUrls: ['./track-detail.component.css']
 })
 export class TrackDetailComponent implements OnInit {
   @Input() track: Track | null = null;

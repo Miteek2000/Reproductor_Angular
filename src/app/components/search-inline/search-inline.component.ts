@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Track, AlbumItem, ArtistItem } from '../../models/track.model';
 
 @Component({
-  selector: 'app-search-inline',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './search-inline.component.html',
-  styleUrls: ['./search-inline.component.css']
+    selector: 'app-search-inline',
+    imports: [CommonModule],
+    templateUrl: './search-inline.component.html',
+    styleUrls: ['./search-inline.component.css']
 })
 export class SearchInlineComponent {
   @Input() isLoading: boolean = false;

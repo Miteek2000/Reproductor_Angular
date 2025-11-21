@@ -6,11 +6,10 @@ import { SpotifyService } from '../../services/spotify.service';
 import { Track, AlbumItem, ArtistItem } from '../../models/track.model';
 
 @Component({
-	selector: 'app-search',
-	standalone: true,
-	imports: [CommonModule, FormsModule, RouterLink],
-	templateUrl: './search.component.html',
-	styleUrls: ['./search.component.css']
+    selector: 'app-search',
+    imports: [CommonModule, FormsModule, RouterLink],
+    templateUrl: './search.component.html',
+    styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
 	searchQuery: string = '';
