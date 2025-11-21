@@ -10,59 +10,63 @@
           (keyup.enter)="onSearch()"
           placeholder="Encuentra canciones, artistas o álbumes"
           class="search-input">
-        <button (click)="onSearch()" class="search-button">Buscar</button>
-        <button *ngIf="hasSearched" (click)="hasSearched = false; searchQuery = ''; searchTracks = [];" class="clear-button">Cerrar</button>
+          <button (click)="onSearch()" class="search-button">Buscar</button>
+          @if (hasSearched) {
+            <button (click)="hasSearched = false; searchQuery = ''; searchTracks = [];" class="clear-button">Cerrar</button>
+          }
+        </div>
+
       </div>
+    </header>
 
-    </div>
-  </header>
+    <!-- Contenido principal -->
+    <main class="main-content">
+      <!-- Canción actual -->
+      <section class="current-track">
+        <app-current-track [track]="currentTrack"></app-current-track>
+      </section>
 
-  <!-- Contenido principal -->
-  <main class="main-content">
-    <!-- Canción actual -->
-    <section class="current-track">
-      <app-current-track [track]="currentTrack"></app-current-track>
-    </section>
+      <!-- Inline search results (muestra cuando se buscan canciones) -->
+      @if (hasSearched) {
+        <section class="search-inline">
+          <app-search-inline
+            [isLoading]="isLoading"
+            [searchTracks]="searchTracks"
+            [searchAlbums]="searchAlbums"
+            [searchArtists]="searchArtists"
+            (playTrack)="selectTrackFromSearch($event)"
+            (selectAlbum)="selectAlbum($event)"
+            (close)="hasSearched=false; searchQuery=''; searchTracks=[];">
+          </app-search-inline>
+        </section>
+      }
 
-    <!-- Inline search results (muestra cuando se buscan canciones) -->
-    <section *ngIf="hasSearched" class="search-inline">
-      <app-search-inline
-        [isLoading]="isLoading"
-        [searchTracks]="searchTracks"
-        [searchAlbums]="searchAlbums"
-        [searchArtists]="searchArtists"
-        (playTrack)="selectTrackFromSearch($event)"
-        (selectAlbum)="selectAlbum($event)"
-        (close)="hasSearched=false; searchQuery=''; searchTracks=[];">
-      </app-search-inline>
-    </section>
+      <!-- Playlist actual (derecha) -->
+      <aside class="playlist">
+        <app-playlist
+          [playlist]="playlist"
+          [currentTrackId]="currentTrack?.id"
+          (select)="selectTrack($event)"
+          (remove)="removeFromPlaylist($event)">
+        </app-playlist>
+      </aside>
+    </main>
 
-    <!-- Playlist actual (derecha) -->
-    <aside class="playlist">
-      <app-playlist
-        [playlist]="playlist"
-        [currentTrackId]="currentTrack?.id"
-        (select)="selectTrack($event)"
-        (remove)="removeFromPlaylist($event)">
-      </app-playlist>
-    </aside>
-  </main>
+    <!-- Controles de reproducción fijos abajo -->
+    <footer class="player-controls">
+      <div class="controls-content">
+        <div class="control-buttons-group">
+          <button class="control-btn prev-btn" title="Anterior" (click)="prevTrack()">
+            ⏮️
+          </button>
+          <button class="control-btn play-btn" title="Reproducir/Pausar">
+            ▶️
+          </button>
+          <button class="control-btn next-btn" title="Siguiente" (click)="nextTrack()">
+            ⏭️
+          </button>
+        </div>
 
-  <!-- Controles de reproducción fijos abajo -->
-  <footer class="player-controls">
-    <div class="controls-content">
-      <div class="control-buttons-group">
-        <button class="control-btn prev-btn" title="Anterior" (click)="prevTrack()">
-          ⏮️
-        </button>
-        <button class="control-btn play-btn" title="Reproducir/Pausar">
-          ▶️
-        </button>
-        <button class="control-btn next-btn" title="Siguiente" (click)="nextTrack()">
-          ⏭️
-        </button>
       </div>
-
-    </div>
-  </footer>
-</div>
+    </footer>
+  </div>

@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Track, AlbumItem, ArtistItem } from '../../models/track.model';
 
 @Component({
     selector: 'app-search-inline',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './search-inline.component.html',
     styleUrls: ['./search-inline.component.css']
 })

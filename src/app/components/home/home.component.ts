@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { SpotifyService } from '../../services/spotify.service';
 import { Track, AlbumItem, ArtistItem } from '../../models/track.model';
@@ -9,7 +9,7 @@ import { PlaylistComponent } from '../playlist/playlist.component';
 
 @Component({
     selector: 'app-home',
-    imports: [CommonModule, FormsModule, CurrentTrackComponent, SearchInlineComponent, PlaylistComponent],
+    imports: [FormsModule, CurrentTrackComponent, SearchInlineComponent, PlaylistComponent],
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
 })

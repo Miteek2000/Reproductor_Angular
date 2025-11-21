@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Track } from '../../models/track.model';
 
 @Component({
     selector: 'app-playlist',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './playlist.component.html',
     styleUrls: ['./playlist.component.css']
 })

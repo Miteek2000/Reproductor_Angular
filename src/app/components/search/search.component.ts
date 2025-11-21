@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { SpotifyService } from '../../services/spotify.service';
@@ -7,7 +7,7 @@ import { Track, AlbumItem, ArtistItem } from '../../models/track.model';
 
 @Component({
     selector: 'app-search',
-    imports: [CommonModule, FormsModule, RouterLink],
+    imports: [FormsModule, RouterLink],
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.css']
 })

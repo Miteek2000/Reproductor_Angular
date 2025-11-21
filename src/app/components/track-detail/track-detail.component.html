@@ -1,46 +1,60 @@
 <div class="detail-container">
   <!-- Header fijo (oculto en modo compacto) -->
-  <header class="detail-header" *ngIf="!compact">
-    <div class="header-content">
-      <a routerLink="/" class="back-btn">Atrás</a>
-      <h1>Ficha de la pista</h1>
-    </div>
-  </header>
+  @if (!compact) {
+    <header class="detail-header">
+      <div class="header-content">
+        <a routerLink="/" class="back-btn">Atrás</a>
+        <h1>Ficha de la pista</h1>
+      </div>
+    </header>
+  }
 
   <!-- Contenido principal -->
   <main class="detail-content">
-    <div *ngIf="isLoading" class="loading">
-      <div class="spinner"></div>
-      <p>Cargando...</p>
-    </div>
-
-    <div *ngIf="!isLoading && track" class="track-detail-card" [ngClass]="{'compact': compact}">
-      <div class="track-image-container">
-        <img [src]="getAlbumImage()" [alt]="track.name" class="track-image">
-        <!-- Botón de reproducción sobre la imagen, aparece al hover -->
-        <button class="hover-play" (click)="playTrack()" title="Reproducir">▶</button>
+    @if (isLoading) {
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Cargando...</p>
       </div>
-      <div class="track-info">
-        <h2 class="track-title">{{ track.name }}</h2>
-        <p class="track-artist">{{ getArtistNames() }}</p>
-        <p *ngIf="!compact" class="track-album">{{ track.album.name }}</p>
-        <button (click)="playTrack()" class="play-button" *ngIf="!compact">
-          Reproducir
-        </button>
-      </div>
-    </div>
+    }
 
-    <div *ngIf="!isLoading && !track" class="error">
-      <p>No se pudo cargar la canción</p>
-    </div>
+    @if (!isLoading && track) {
+      <div class="track-detail-card" [ngClass]="{'compact': compact}">
+        <div class="track-image-container">
+          <img [src]="getAlbumImage()" [alt]="track.name" class="track-image">
+          <!-- Botón de reproducción sobre la imagen, aparece al hover -->
+          <button class="hover-play" (click)="playTrack()" title="Reproducir">▶</button>
+        </div>
+        <div class="track-info">
+          <h2 class="track-title">{{ track.name }}</h2>
+          <p class="track-artist">{{ getArtistNames() }}</p>
+          @if (!compact) {
+            <p class="track-album">{{ track.album.name }}</p>
+          }
+          @if (!compact) {
+            <button (click)="playTrack()" class="play-button">
+              Reproducir
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (!isLoading && !track) {
+      <div class="error">
+        <p>No se pudo cargar la canción</p>
+      </div>
+    }
   </main>
 
   <!-- Controles fijos (ocultos en modo compacto) -->
-  <footer class="player-controls" *ngIf="!compact">
-    <div class="controls-content">
-      <button class="control-btn">⏮️</button>
-      <button class="control-btn play-btn">▶️</button>
-      <button class="control-btn">⏭️</button>
-    </div>
-  </footer>
+  @if (!compact) {
+    <footer class="player-controls">
+      <div class="controls-content">
+        <button class="control-btn">⏮️</button>
+        <button class="control-btn play-btn">▶️</button>
+        <button class="control-btn">⏭️</button>
+      </div>
+    </footer>
+  }
 </div>
