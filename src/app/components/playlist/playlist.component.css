@@ -1,0 +1,157 @@
+.playlist {
+	background: rgba(40, 4, 20, 0.38);
+	backdrop-filter: blur(14px) saturate(130%);
+	-webkit-backdrop-filter: blur(14px) saturate(130%);
+	border-radius: 20px;
+	padding: 1.2rem;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: 1px solid rgba(255, 182, 193, 0.06);
+}
+
+.playlist-title {
+	font-size: 1.45rem;
+	margin-bottom: 1rem;
+	font-weight: 800;
+	background: linear-gradient(135deg, var(--pink-400), var(--pink-300));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	text-align: center;
+	letter-spacing: -0.4px;
+}
+
+.playlist-content {
+	flex: 1;
+	overflow-y: auto;
+}
+
+.empty-playlist {
+	text-align: center;
+	color: #94a3b8;
+	padding: 2rem;
+}
+
+.playlist-items {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.playlist-item {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.9rem;
+	background: rgba(255, 182, 193, 0.06);
+	backdrop-filter: blur(8px);
+	border-radius: 12px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	position: relative;
+	border: 1px solid rgba(255, 182, 193, 0.04);
+}
+
+.playlist-item::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 4px;
+	background: linear-gradient(180deg, var(--pink-500), var(--pink-400));
+	border-radius: 12px 0 0 12px;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.playlist-item:hover {
+	background: rgba(255, 182, 193, 0.09);
+	transform: translateX(6px);
+	box-shadow: 0 8px 22px rgba(255, 182, 193, 0.08);
+}
+
+.playlist-item:hover::before {
+	opacity: 1;
+}
+
+.playlist-item.active {
+	background: rgba(255, 182, 193, 0.14);
+	box-shadow: 0 8px 24px rgba(255, 182, 193, 0.12);
+}
+
+.playlist-item.active::before {
+	opacity: 1;
+	width: 6px;
+}
+
+.playlist-item-image {
+	width: 64px;
+	height: 64px;
+	border-radius: 12px;
+	object-fit: cover;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+	transition: transform 0.4s ease;
+}
+
+.playlist-item:hover .playlist-item-image {
+	transform: scale(1.05);
+}
+
+.playlist-item-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.playlist-item-name {
+	font-weight: 700;
+	color: #f3e8ff;
+	margin-bottom: 0.25rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 0.95rem;
+	letter-spacing: 0.2px;
+}
+
+.playlist-item-artist {
+	font-size: 0.85rem;
+	color: rgba(233, 213, 255, 0.9);
+	margin-bottom: 0.25rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-weight: 500;
+}
+
+.playlist-item-album {
+	font-size: 0.75rem;
+	color: rgba(243, 232, 255, 0.7);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-weight: 500;
+}
+
+.remove-btn {
+	background: var(--pink-500);
+	color: var(--surface-1);
+	border: none;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	cursor: pointer;
+	font-size: 1rem;
+	transition: transform 0.25s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+	font-weight: 600;
+}
+
+.remove-btn:hover {
+	transform: scale(1.12) rotate(20deg);
+}

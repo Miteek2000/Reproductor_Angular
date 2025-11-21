@@ -1,0 +1,26 @@
+<h3 class="playlist-title">Playlist Actual</h3>
+<div class="playlist-content">
+  <div *ngIf="playlist.length === 0" class="empty-playlist">
+    <p>No hay canciones en la playlist</p>
+  </div>
+  <div class="playlist-items" *ngIf="playlist.length > 0">
+    <div 
+      *ngFor="let track of playlist" 
+      class="playlist-item"
+      [class.active]="currentTrackId === track.id"
+      (click)="onSelect(track)">
+      <img [src]="getAlbumImage(track)" [alt]="track.name" class="playlist-item-image">
+      <div class="playlist-item-info">
+        <p class="playlist-item-name">{{ track.name }}</p>
+        <p class="playlist-item-artist">{{ getArtistNames(track) }}</p>
+        <p class="playlist-item-album">{{ track.album?.name || '' }}</p>
+      </div>
+      <button 
+        class="remove-btn" 
+        (click)="onRemove(track.id, $event)"
+        title="Eliminar">
+        ✕
+      </button>
+    </div>
+  </div>
+</div>

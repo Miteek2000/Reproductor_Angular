@@ -1,0 +1,46 @@
+<div class="search-results-inline">
+  <div *ngIf="isLoading" class="loading">Cargando resultados...</div>
+
+  <div *ngIf="!isLoading && (searchTracks.length || searchAlbums.length)">
+
+    <div *ngIf="searchTracks.length">
+      <h3 class="section-title">Canciones</h3>
+      <div class="results-grid">
+        <div *ngFor="let track of searchTracks" class="result-card" (click)="onPlay(track)">
+          <div class="result-image">
+            <img [src]="getAlbumImageForTrack(track)" [alt]="track.name">
+            <button class="hover-play" (click)="onPlay(track, $event); $event.stopPropagation();" title="Reproducir">▶</button>
+          </div>
+          <div class="result-info">
+            <div class="result-title">{{ track.name }}</div>
+            <div class="result-subtitle">{{ getArtistNames(track) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="searchTracks.length && searchAlbums.length" class="section-divider"></div>
+    <div *ngIf="searchAlbums.length">
+      <h3 class="section-title">Álbumes</h3>
+      <div class="results-grid">
+        <div *ngFor="let album of searchAlbums" class="result-card" (click)="onSelectAlbum(album)">
+          <div class="result-image">
+            <img [src]="album.images[0]?.url || 'https://via.placeholder.com/300'" [alt]="album.name">
+          </div>
+          <div class="result-info">
+            <div class="result-title">{{ album.name }}</div>
+            <div class="result-subtitle">{{ album.artists?.[0]?.name || '' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && (!searchTracks.length && !searchAlbums.length && !searchArtists.length)" class="no-results">
+    <p>No se encontraron resultados.</p>
+  </div>
+
+  <div class="actions">
+    <button class="clear-button" (click)="onClose()">Cerrar</button>
+  </div>
+</div>
