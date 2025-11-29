@@ -6,10 +6,11 @@ import { Track, AlbumItem, ArtistItem } from '../../models/track.model';
 import { CurrentTrackComponent } from '../current-track/current-track.component';
 import { SearchInlineComponent } from '../search-inline/search-inline.component';
 import { PlaylistComponent } from '../playlist/playlist.component';
+import { InlineDetailComponent } from '../inline-detail/inline-detail.component';
 
 @Component({
     selector: 'app-home',
-    imports: [FormsModule, CurrentTrackComponent, SearchInlineComponent, PlaylistComponent],
+    imports: [FormsModule, CurrentTrackComponent, SearchInlineComponent, PlaylistComponent, InlineDetailComponent],
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
 })
@@ -26,6 +27,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   searchTracks: Track[] = [];
   searchAlbums: AlbumItem[] = [];
   searchArtists: ArtistItem[] = [];
+  // Inline detail state
+  detailOpen: boolean = false;
+  detailType: 'track' | 'album' | 'artist' | null = null;
+  detailItem: Track | AlbumItem | ArtistItem | null = null;
 
   constructor(private spotifyService: SpotifyService) {}
 
@@ -67,6 +72,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // Al iniciar una nueva búsqueda, cerrar cualquier detalle inline y resetearlo
+    this.closeDetail();
     this.isLoading = true;
     this.hasSearched = false;
 
@@ -75,6 +82,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.searchTracks = res.tracks || [];
         this.searchAlbums = res.albums || [];
         this.searchArtists = res.artists || [];
+        // Asegurar que el inline de resultados se muestre (no el detalle)
+        this.detailOpen = false;
+        this.detailType = null;
+        this.detailItem = null;
         this.hasSearched = true;
         this.isLoading = false;
         this.apiConnected = true;
@@ -103,6 +114,48 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.searchTracks = [];
   }
 
+  // Cerrar toda la búsqueda y detalle
+  closeAllSearch(): void {
+    this.closeDetail();
+    this.hasSearched = false;
+    this.searchQuery = '';
+    this.searchTracks = [];
+    this.searchAlbums = [];
+    this.searchArtists = [];
+  }
+
+  // Abrir vista de detalle inline
+  openDetail(payload: { type: 'track' | 'album' | 'artist'; item: Track | AlbumItem | ArtistItem }) {
+    console.log('[home] openDetail', payload.type, (payload.item as any)?.id || payload.item);
+    this.detailType = payload.type;
+    this.detailItem = payload.item;
+    this.detailOpen = true;
+  }
+
+  closeDetail() {
+    this.detailOpen = false;
+    this.detailType = null;
+    this.detailItem = null;
+    // opcional: mantener búsqueda abierta o no; aquí dejamos la búsqueda visible
+  }
+
+  // Reusar la reproducción desde el detalle
+  playFromDetail(track: Track) {
+    this.selectTrackFromSearch(track);
+  }
+
+  // Cuando el detalle solicita abrir un álbum (ver pistas)
+  openAlbumFromDetail(album: AlbumItem) {
+    // Llamar a selectAlbum; el cierre del detalle se realizará cuando se carguen las pistas
+    this.selectAlbum(album);
+  }
+
+  openArtistFromDetail(artist: ArtistItem) {
+    // Por ahora solo cerramos detalle y podríamos navegar a una vista de artista
+    this.closeDetail();
+    // En el futuro: navegar a ruta /artist/:id o cargar contenido del artista
+  }
+
   // Handle clicking an album in search results: navigate to album's first track or open album view
   selectAlbum(album: any): void {
     if (!album || !album.id) return;
@@ -128,6 +181,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.searchTracks = [];
         this.searchAlbums = [];
         this.searchArtists = [];
+        // Cerrar también el detalle inline (ya que se cargaron las pistas)
+        this.detailOpen = false;
+        this.detailType = null;
+        this.detailItem = null;
       },
       error: (err) => {
         this.isLoading = false;

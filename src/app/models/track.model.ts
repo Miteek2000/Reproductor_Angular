@@ -37,12 +37,16 @@ export interface AlbumItem {
   release_date?: string;
   total_tracks?: number;
   artists?: Artist[];
+  popularity?: number;
 }
 
 export interface ArtistItem {
   id: string;
   name: string;
   images?: Image[];
+  followers?: { total: number };
+  genres?: string[];
+  popularity?: number;
 }
 
 export interface SearchAllResponse {

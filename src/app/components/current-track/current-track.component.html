@@ -1,12 +1,12 @@
 @if (track) {
   <div class="track-card horizontal">
     <div class="track-image-large">
-      <img [src]="getAlbumImage(track)" [alt]="track?.name || ''">
+        <img [src]="getAlbumImage(track)" [alt]="track.name || ''">
     </div>
     <div class="track-info-large">
-      <h2 class="track-title">{{ track?.name }}</h2>
+        <h2 class="track-title">{{ track.name }}</h2>
       <p class="track-artist">{{ getArtistNames(track) }}</p>
-      <p class="track-album">{{ track?.album?.name || '' }}</p>
+        <p class="track-album">{{ track.album.name || '' }}</p>
     </div>
   </div>
 } @else {

@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { Track } from '../../models/track.model';
 
 @Component({
     selector: 'app-current-track',
-    imports: [],
+  imports: [CommonModule],
     templateUrl: './current-track.component.html',
     styleUrls: ['./current-track.component.css']
 })

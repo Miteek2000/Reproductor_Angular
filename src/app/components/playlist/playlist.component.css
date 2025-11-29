@@ -1,14 +1,13 @@
 .playlist {
-	background: rgba(40, 4, 20, 0.38);
-	backdrop-filter: blur(14px) saturate(130%);
-	-webkit-backdrop-filter: blur(14px) saturate(130%);
-	border-radius: 20px;
-	padding: 1.2rem;
-	box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
-	border: 1px solid rgba(255, 182, 193, 0.06);
+    background: rgba(40, 4, 20, 0.38);
+    backdrop-filter: blur(14px) saturate(130%);
+    -webkit-backdrop-filter: blur(14px) saturate(130%);
+    border-radius: 20px;
+    padding: 1.2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 182, 193, 0.06);
 }
 
 .playlist-title {
@@ -25,7 +24,14 @@
 
 .playlist-content {
 	flex: 1;
-	overflow-y: auto;
+	/* dejar scrolling en el contenedor mayor (aside.playlist), evitar doble scroll aquí */
+	overflow-y: visible;
+}
+
+:host {
+	display: block;
+	/* permitir que el elemento host (app-playlist) crezca, pero el aside padre controlará el scroll */
+	max-height: none;
 }
 
 .empty-playlist {

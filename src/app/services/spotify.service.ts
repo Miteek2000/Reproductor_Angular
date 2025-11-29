@@ -151,6 +151,58 @@ export class SpotifyService {
     );
   }
 
+  /**
+   * Obtiene la información de un artista por su id
+   */
+  getArtist(artistId: string): Observable<ArtistItem> {
+    return from(this.getAccessToken()).pipe(
+      switchMap(() => this.http.get<ArtistItem>(`${this.apiUrl}/artists/${artistId}`, {
+        headers: this.getHeaders()
+      }))
+    );
+  }
+
+  /**
+   * Obtiene los álbumes de un artista. No ordena por popularidad — devuelve los items tal cual.
+   */
+  getArtistAlbums(artistId: string, limit: number = 20): Observable<AlbumItem[]> {
+    const params = new HttpParams()
+      .set('include_groups', 'album,single')
+      .set('market', 'ES')
+      .set('limit', String(limit));
+
+    return from(this.getAccessToken()).pipe(
+      switchMap(() => this.http.get<any>(`${this.apiUrl}/artists/${artistId}/albums`, {
+        headers: this.getHeaders(),
+        params
+      })),
+      map(res => res.items || [])
+    );
+  }
+
+  /**
+   * Obtiene información completa de varios álbumes por sus ids (máx 20 ids por petición)
+   */
+  getAlbumsByIds(ids: string[]): Observable<AlbumItem[]> {
+    if (!ids || ids.length === 0) return new Observable<AlbumItem[]>(subscriber => { subscriber.next([]); subscriber.complete(); });
+    const chunk = ids.slice(0, 20).join(',');
+    return from(this.getAccessToken()).pipe(
+      switchMap(() => this.http.get<any>(`${this.apiUrl}/albums`, {
+        headers: this.getHeaders(),
+        params: new HttpParams().set('ids', chunk)
+      })),
+      map(res => (res.albums || []).map((alb: any) => ({
+        id: alb.id,
+        name: alb.name,
+        images: alb.images || [],
+        release_date: alb.release_date,
+        total_tracks: alb.total_tracks,
+        artists: alb.artists?.map((a: any) => ({ id: a.id, name: a.name })) || [],
+        popularity: alb.popularity
+      } as AlbumItem)))
+    );
+  }
+
   setCurrentTrack(track: Track): void {
     this.currentTrackSubject.next(track);
     this.addToPlaylist(track);
@@ -167,7 +219,20 @@ export class SpotifyService {
 
   removeFromPlaylist(trackId: string): void {
     const currentPlaylist = this.playlistSubject.value;
-    this.playlistSubject.next(currentPlaylist.filter(t => t.id !== trackId));
+    const updated = currentPlaylist.filter(t => t.id !== trackId);
+    this.playlistSubject.next(updated);
+    // Si la playlist queda vacía, limpiar la pista actual (sin imagen)
+    if (!updated || updated.length === 0) {
+      this.currentTrackSubject.next(null);
+    }
+  }
+
+  /**
+   * Vacía la playlist completamente y limpia la pista actual.
+   */
+  clearPlaylist(): void {
+    this.playlistSubject.next([]);
+    this.currentTrackSubject.next(null);
   }
 
   getCurrentTrack(): Track | null {

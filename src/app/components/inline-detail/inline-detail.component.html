@@ -1,0 +1,43 @@
+<div class="inline-detail">
+  <div class="detail-header">
+    <button class="close-btn" (click)="onClose()">✕</button>
+  </div>
+
+  <div class="detail-body">
+    <div class="detail-image">
+      <img [src]="getImage()" [alt]="getTitle()">
+    </div>
+
+    <div class="detail-info">
+      <h3 class="detail-title">{{ getTitle() }}</h3>
+      <p class="detail-subtitle">{{ getSubtitle() }}</p>
+
+      <div class="detail-actions">
+        <button *ngIf="type === 'track'" (click)="onPlay()" class="btn">Reproducir</button>
+        <button *ngIf="type === 'album'" (click)="onOpenAlbum()" class="btn">Ver pistas</button>
+      </div>
+
+      <!-- Si es artista, mostrar información adicional y álbumes -->
+      <div *ngIf="type === 'artist'" class="artist-panel">
+        <div *ngIf="isLoadingArtist" class="loading">Cargando artista...</div>
+        <div *ngIf="artistError" class="error">{{ artistError }}</div>
+
+        <div *ngIf="artistDetails" class="artist-info">
+          <p class="artist-followers"><strong class="label">Seguidores</strong><span class="value">{{ formatFollowers(artistDetails.followers?.total) }}</span></p>
+          <p class="artist-genres"><strong class="label">Géneros</strong><span class="value">{{ (artistDetails.genres ?? []).slice(0,3).join(', ') || '-' }}</span></p>
+          <p class="artist-popularity"><strong class="label">Popularidad</strong><span class="value">{{ artistDetails.popularity ?? '-' }}</span></p>
+        </div>
+
+        <div *ngIf="artistAlbums && artistAlbums.length" class="artist-albums">
+          <h4>Álbumes</h4>
+          <div class="albums-grid">
+            <div *ngFor="let alb of artistAlbums" class="album-card" (click)="openAlbum.emit(alb)">
+              <img [src]="alb.images[0]?.url || 'https://via.placeholder.com/300'" [alt]="alb.name">
+              <div class="album-name">{{ alb.name }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,14 +3,14 @@
     <div class="loading">Cargando resultados...</div>
   }
 
-  @if (!isLoading && (searchTracks.length || searchAlbums.length)) {
+  @if (!isLoading && (searchTracks.length || searchAlbums.length || searchArtists.length)) {
     <div>
       @if (searchTracks.length) {
         <div>
           <h3 class="section-title">Canciones</h3>
           <div class="results-grid">
             @for (track of searchTracks; track track) {
-              <div class="result-card" (click)="onPlay(track)">
+              <div class="result-card" (click)="onOpenDetail('track', track)">
                 <div class="result-image">
                   <img [src]="getAlbumImageForTrack(track)" [alt]="track.name">
                   <button class="hover-play" (click)="onPlay(track, $event); $event.stopPropagation();" title="Reproducir">▶</button>
@@ -32,13 +32,30 @@
           <h3 class="section-title">Álbumes</h3>
           <div class="results-grid">
             @for (album of searchAlbums; track album) {
-              <div class="result-card" (click)="onSelectAlbum(album)">
+              <div class="result-card" (click)="onOpenDetail('album', album)">
                 <div class="result-image">
                   <img [src]="album.images[0]?.url || 'https://via.placeholder.com/300'" [alt]="album.name">
                 </div>
                 <div class="result-info">
                   <div class="result-title">{{ album.name }}</div>
                   <div class="result-subtitle">{{ album.artists?.[0]?.name || '' }}</div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      @if (searchArtists.length) {
+        <div>
+          <h3 class="section-title">Artistas</h3>
+          <div class="results-grid">
+            @for (artist of searchArtists; track artist) {
+              <div class="result-card artist-card" (click)="onOpenDetail('artist', artist)">
+                <div class="result-image">
+                  <img [src]="artist.images?.[0]?.url || 'https://via.placeholder.com/300'" [alt]="artist.name">
+                </div>
+                <div class="result-info">
+                  <div class="result-title">{{ artist.name }}</div>
                 </div>
               </div>
             }
@@ -54,7 +71,4 @@
     </div>
   }
 
-  <div class="actions">
-    <button class="clear-button" (click)="onClose()">Cerrar</button>
-  </div>
 </div>

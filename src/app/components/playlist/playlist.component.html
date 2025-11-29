@@ -16,7 +16,7 @@
           <div class="playlist-item-info">
             <p class="playlist-item-name">{{ track.name }}</p>
             <p class="playlist-item-artist">{{ getArtistNames(track) }}</p>
-            <p class="playlist-item-album">{{ track.album?.name || '' }}</p>
+            <p class="playlist-item-album">{{ track.album.name || '' }}</p>
           </div>
           <button
             class="remove-btn"

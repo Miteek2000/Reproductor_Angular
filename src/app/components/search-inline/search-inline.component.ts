@@ -16,6 +16,8 @@ export class SearchInlineComponent {
 
   @Output() playTrack = new EventEmitter<Track>();
   @Output() selectAlbum = new EventEmitter<AlbumItem>();
+  @Output() selectArtist = new EventEmitter<ArtistItem>();
+  @Output() openDetail = new EventEmitter<{ type: 'track' | 'album' | 'artist'; item: Track | AlbumItem | ArtistItem }>();
   @Output() close = new EventEmitter<void>();
 
   onPlay(track: Track, e?: Event) {
@@ -25,6 +27,15 @@ export class SearchInlineComponent {
 
   onSelectAlbum(album: AlbumItem) {
     this.selectAlbum.emit(album);
+  }
+
+  onSelectArtist(artist: ArtistItem) {
+    this.selectArtist.emit(artist);
+  }
+
+  onOpenDetail(type: 'track' | 'album' | 'artist', item: Track | AlbumItem | ArtistItem) {
+    console.log('[search-inline] openDetail', type, item?.id || item);
+    this.openDetail.emit({ type, item });
   }
 
   onClose() {
@@ -40,5 +51,12 @@ export class SearchInlineComponent {
     return (track && track.album && track.album.images && track.album.images.length > 0)
       ? track.album.images[0].url
       : 'https://via.placeholder.com/300';
+  }
+
+  getArtistImage(artist: ArtistItem): string {
+    // Algunos ArtistItem pueden tener images, otros no
+    // @ts-ignore
+    const imgs = (artist as any)?.images || [];
+    return (imgs && imgs.length > 0) ? imgs[0].url : 'https://via.placeholder.com/300';
   }
 }
