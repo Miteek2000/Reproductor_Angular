@@ -2,15 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable, of, delay, BehaviorSubject } from 'rxjs';
 import { Track } from '../models/track.model';
 
-/**
- * Servicio de demostración con datos simulados
- * Úsalo si no tienes token de Spotify disponible
- * 
- * Para usar este servicio:
- * 1. Renombra spotify.service.ts a spotify.service.backup.ts
- * 2. Renombra este archivo a spotify.service.ts
- */
-
 @Injectable({
   providedIn: 'root'
 })

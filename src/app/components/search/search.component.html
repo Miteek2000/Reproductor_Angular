@@ -1,5 +1,5 @@
 <div class="search-container">
-  <!-- Barra de búsqueda fija -->
+
   <header class="search-header">
     <div class="search-bar">
       <input
@@ -14,7 +14,7 @@
         <button routerLink="/" class="back-button">Atrás</button>
       </div>
 
-      <!-- Indicador de estado de API -->
+
       @if (apiConnected) {
         <div class="api-status">
           <span class="status-dot"></span>
@@ -22,7 +22,7 @@
         </div>
       }
 
-      <!-- Mensaje de error -->
+
       @if (errorMessage) {
         <div class="error-message">
           ⚠️ {{ errorMessage }}
@@ -30,7 +30,7 @@
       }
     </header>
 
-    <!-- Resultados de búsqueda -->
+
     <main class="search-results">
       @if (isLoading) {
         <div class="loading">
@@ -48,7 +48,6 @@
 
       @if (!isLoading && (searchTracks.length || searchAlbums.length || searchArtists.length)) {
         <div class="results-wrapper">
-          <!-- Tracks section -->
           @if (searchTracks.length) {
             <section class="section">
               <h3 class="section-title">Canciones</h3>
@@ -73,7 +72,7 @@
               </div>
             </section>
           }
-          <!-- Albums section -->
+
           @if (searchAlbums.length) {
             <section class="section">
               <h3 class="section-title">Álbumes</h3>
@@ -93,7 +92,7 @@
               </div>
             </section>
           }
-          <!-- Artists section -->
+
           @if (searchArtists.length) {
             <section class="section">
               <h3 class="section-title">Artistas</h3>
@@ -123,7 +122,6 @@
       }
     </main>
 
-    <!-- Controles fijos abajo -->
     <footer class="player-controls">
       <div class="controls-content">
         <button class="control-btn">⏮️</button>

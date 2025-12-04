@@ -1,5 +1,5 @@
 <div class="detail-container">
-  <!-- Header fijo (oculto en modo compacto) -->
+
   @if (!compact) {
     <header class="detail-header">
       <div class="header-content">
@@ -9,7 +9,7 @@
     </header>
   }
 
-  <!-- Contenido principal -->
+
   <main class="detail-content">
     @if (isLoading) {
       <div class="loading">
@@ -22,7 +22,7 @@
       <div class="track-detail-card" [ngClass]="{'compact': compact}">
         <div class="track-image-container">
           <img [src]="getAlbumImage()" [alt]="track.name" class="track-image">
-          <!-- Botón de reproducción sobre la imagen, aparece al hover -->
+
           <button class="hover-play" (click)="playTrack()" title="Reproducir">▶</button>
         </div>
         <div class="track-info">
@@ -47,7 +47,6 @@
     }
   </main>
 
-  <!-- Controles fijos (ocultos en modo compacto) -->
   @if (!compact) {
     <footer class="player-controls">
       <div class="controls-content">

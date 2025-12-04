@@ -17,7 +17,7 @@
         <button *ngIf="type === 'album'" (click)="onOpenAlbum()" class="btn">Ver pistas</button>
       </div>
 
-      <!-- Si es artista, mostrar información adicional y álbumes -->
+
       <div *ngIf="type === 'artist'" class="artist-panel">
         <div *ngIf="isLoadingArtist" class="loading">Cargando artista...</div>
         <div *ngIf="artistError" class="error">{{ artistError }}</div>
